@@ -103,28 +103,29 @@ def period_uncertainty(periods, power):
 
 
 def spectra(chi2, oversampling_factor):
-    SR = numpy.min(chi2) / chi2
-    SDE_raw = (1 - numpy.mean(SR)) / numpy.std(SR)
 
-    # Scale SDE_power from 0 to SDE_raw
-    power_raw = SR - numpy.mean(SR)  # shift down to the mean being zero
-    scale = SDE_raw / numpy.max(power_raw)  # scale factor to touch max=SDE_raw
-    power_raw = power_raw * scale
+    # Compute signal residue.
+    SR = numpy.amin(chi2) / chi2
 
-    # Detrended SDE, named "power"
+    # Compute the raw power.
+    median = numpy.median(SR)
+    mad_std = 1.4826 * numpy.median(numpy.abs(SR - median))
+    power_raw = (SR - median)/mad_std
+    SDE_raw = numpy.amax(power_raw)
+
+    # Get the kernel size for a period dependent detrending.
     kernel = oversampling_factor * tls_constants.SDE_MEDIAN_KERNEL_SIZE
     if kernel % 2 == 0:
         kernel = kernel + 1
-    if len(power_raw) > 2 * kernel:
-        my_median = running_median(power_raw, kernel)
-        power = power_raw - my_median
-        # Re-normalize to range between median = 0 and peak = SDE
-        # shift down to the mean being zero
-        power = power - numpy.mean(power)
-        SDE = numpy.max(power / numpy.std(power))
-        # scale factor to touch max=SDE
-        scale = SDE / numpy.max(power)
-        power = power * scale
+
+    if len(chi2) > 2 * kernel:
+
+        # Compute the power.
+        median = running_median(SR, kernel)
+        mad_std = 1.4826 * numpy.median(numpy.abs(SR - median))
+        power = (SR - median) / mad_std
+        SDE = numpy.amax(power)
+
     else:
         power = power_raw
         SDE = SDE_raw
