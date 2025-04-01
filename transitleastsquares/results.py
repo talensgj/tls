@@ -34,6 +34,7 @@ class transitleastsquaresresults(dict):
                     "after_transit_count",
                     "before_transit_count",
                     "periods",
+                    "durations",
                     "power",
                     "power_raw",
                     "SR",

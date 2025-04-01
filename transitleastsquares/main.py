@@ -54,7 +54,7 @@ class transitleastsquares(object):
 
         if self.verbose:
             print(tls_constants.TLS_VERSION)
-        
+
 
         periods = period_grid(
             R_star=self.R_star,
@@ -441,6 +441,7 @@ class transitleastsquares(object):
             after_transit_count,
             before_transit_count,
             test_statistic_periods,
+            durations,
             power,
             power_raw,
             SR,
