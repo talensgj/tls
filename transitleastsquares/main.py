@@ -153,7 +153,8 @@ class transitleastsquares(object):
                 lc_cache_overview=lc_cache_overview,
                 T0_fit_margin=self.T0_fit_margin,
             )
-            for data in pool.imap_unordered(params, periods):
+
+            for data in pool.imap_unordered(params, periods, chunksize=self.chunksize):
                 test_statistic_periods.append(data[0])
                 test_statistic_residuals.append(data[1])
                 test_statistic_rows.append(data[2])
