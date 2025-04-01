@@ -79,7 +79,7 @@ def validate_args(self, kwargs):
     )
 
     self.use_threads = kwargs.get("use_threads", multiprocessing.cpu_count())
-    self.chuncksize = kwargs.get('chunksize', 500)
+    self.chunksize = kwargs.get('chunksize', 500)
 
     self.per = kwargs.get("per", tls_constants.DEFAULT_PERIOD)
     self.rp = kwargs.get("rp", tls_constants.DEFAULT_RP)
